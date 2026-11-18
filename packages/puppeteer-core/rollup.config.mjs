@@ -3,56 +3,77 @@
  * Copyright 2024 Google Inc.
  * SPDX-License-Identifier: Apache-2.0
  */
-import path from 'node:path';
-
-import {getBabelOutputPlugin} from '@rollup/plugin-babel';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
+import terser from '@rollup/plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import {defineConfig} from 'rollup';
+import {dts} from 'rollup-plugin-dts';
 
-const cwd = process.cwd();
+const BIDI_CONNECTOR_STUB_ID = '\0bidi-connector-stub';
 
-export default {
-  input: 'lib/puppeteer/puppeteer-core-browser.js',
-  output: {
-    format: 'iife',
-    file: 'lib/es5-iife/puppeteer-core-browser.js',
-    name: 'Puppeteer',
+// Replaces the BiDi connector with a stub so the BiDi implementation
+// (and its dynamic imports) are excluded from the browser build.
+const stripBiDi = {
+  name: 'strip-bidi',
+  resolveId(source) {
+    if (/(^|\/)bidi\/BrowserConnector\.js$/.test(source)) {
+      return BIDI_CONNECTOR_STUB_ID;
+    }
+    return null;
   },
-  external: (id, parent, isResolved) => {
-    if (id.includes('BrowserConnector')) {
-      return false;
+  load(id) {
+    if (id === BIDI_CONNECTOR_STUB_ID) {
+      return `export function _connectToBiDiBrowser() {
+  throw new Error('WebDriver BiDi is not supported in this build.');
+}`;
     }
-    if (id.includes('BrowserWebSocketTransport')) {
-      return false;
-    }
-    if (id.includes('node_modules')) {
-      return true;
-    }
-    if (id.includes('@puppeteer/browsers')) {
-      return true;
-    }
-    if (id.startsWith(path.join(cwd, `lib`, `puppeteer`, `bidi`))) {
-      return true;
-    }
-    if (id.startsWith(path.join(cwd, `lib`, `puppeteer`, `node`))) {
-      return true;
-    }
-    return false;
+    return null;
   },
-  plugins: [
-    nodeResolve({
-      browser: true,
-    }),
-    getBabelOutputPlugin({
-      plugins: [
-        '@babel/plugin-transform-class-static-block',
-        '@babel/plugin-transform-private-methods',
-        '@babel/plugin-transform-private-property-in-object',
-        '@babel/plugin-transform-class-properties',
-        '@babel/plugin-transform-dynamic-import',
-        '@babel/plugin-transform-modules-commonjs',
-      ],
-      allowAllFormats: true,
-      compact: false,
-    }),
-  ],
 };
+
+export default [
+  defineConfig({
+    input: 'src/puppeteer-core-browser.ts',
+    output: {
+      file: 'lib/index.js',
+      format: 'es',
+      sourcemap: true,
+    },
+    external: (id, parent) => {
+      // console.log(parent, '||', id);
+      if (id === 'ws' || id === '@puppeteer/browsers') {
+        return true;
+      }
+      if (id.includes('tslib') || id.includes('node_modules')) {
+        return true;
+      }
+      return false;
+    },
+    plugins: [
+      stripBiDi,
+      nodeResolve({
+        browser: true,
+      }),
+      typescript({
+        tsconfig: './tsconfig.json',
+      }),
+      replace({
+        preventAssignment: true,
+        'typeof process': JSON.stringify('undefined'),
+        'typeof Buffer': JSON.stringify('undefined'),
+      }),
+      terser({format: {comments: false}}),
+      // Sonda({gzip: true, brotli: true, sources: true}),
+    ],
+  }),
+  defineConfig({
+    input: 'src/puppeteer-core-browser.ts',
+    output: {
+      file: 'lib/index.d.ts',
+      format: 'esm',
+      sourcemap: true,
+    },
+    plugins: [stripBiDi, dts({sourcemap: true})],
+  }),
+];
