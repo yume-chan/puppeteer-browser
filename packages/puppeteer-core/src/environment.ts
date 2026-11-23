@@ -14,7 +14,7 @@ import type {ScreenRecorder} from './node/ScreenRecorder.js';
 /**
  * @internal
  */
-export const isNode = !!(typeof process !== 'undefined' && process.version);
+export const isNode = false;
 
 export interface EnvironmentDependencies {
   path?: typeof Path;

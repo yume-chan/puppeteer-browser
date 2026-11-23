@@ -5,7 +5,6 @@
  */
 
 import type {Browser} from '../api/Browser.js';
-import {_connectToBiDiBrowser} from '../bidi/BrowserConnector.js';
 import {_connectToCdpBrowser} from '../cdp/BrowserConnector.js';
 import {environment, isNode} from '../environment.js';
 import {assert} from '../util/assert.js';
@@ -37,13 +36,9 @@ export async function _connectToBrowser(
     await getConnectionTransport(options);
 
   if (options.protocol === 'webDriverBiDi') {
-    const bidiBrowser = await _connectToBiDiBrowser(
-      connectionTransport,
-      endpointUrl,
-      options,
-      options.logger,
+    throw new Error(
+      'WebDriver BiDi protocol is not supported in this build of Puppeteer',
     );
-    return bidiBrowser;
   } else {
     const cdpBrowser = await _connectToCdpBrowser(
       connectionTransport,

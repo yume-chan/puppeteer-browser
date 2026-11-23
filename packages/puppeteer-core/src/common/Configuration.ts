@@ -34,7 +34,7 @@ export interface Configuration {
   cacheDirectory?: string;
   /**
    * Specifies an executable path to be used in
-   * {@link PuppeteerNode.launch | puppeteer.launch}.
+   * `puppeteer.launch`.
    *
    * Can be overridden by `PUPPETEER_EXECUTABLE_PATH`.
    *
@@ -111,7 +111,7 @@ export interface ChromeSettings {
    * Can be overridden by `PUPPETEER_CHROME_VERSION`
    * or `PUPPETEER_SKIP_CHROME_DOWNLOAD`.
    *
-   * See {@link PuppeteerNode.launch | puppeteer.launch} on how executable path
+   * See `puppeteer.launch` on how executable path
    * is inferred.
    *
    * @example 119.0.6045.105
@@ -151,7 +151,7 @@ export interface ChromeHeadlessShellSettings {
    *
    * Can be overridden by `PUPPETEER_CHROME_HEADLESS_SHELL_VERSION`.
    *
-   * See {@link PuppeteerNode.launch | puppeteer.launch} on how executable path
+   * See `puppeteer.launch` on how executable path
    * is inferred.
    *
    * @example 119.0.6045.105
@@ -190,7 +190,7 @@ export interface FirefoxSettings {
    *
    * Can be overridden by `PUPPETEER_FIREFOX_VERSION`.
    *
-   * See {@link PuppeteerNode.launch | puppeteer.launch} on how executable path
+   * See `puppeteer.launch` on how executable path
    * is inferred.
    *
    * @example stable_129.0

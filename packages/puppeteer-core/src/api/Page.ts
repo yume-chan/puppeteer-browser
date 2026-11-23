@@ -2218,7 +2218,7 @@ export abstract class Page extends EventEmitter<PageEvents> {
    * Emulates a given device's metrics and user agent.
    *
    * To aid emulation, Puppeteer provides a list of known devices that can be
-   * via {@link KnownDevices}.
+   * via `KnownDevices`.
    *
    * @remarks
    * This method is a shortcut for calling two methods:

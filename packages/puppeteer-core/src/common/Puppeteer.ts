@@ -27,9 +27,9 @@ export interface CommonPuppeteerSettings {
  * The main Puppeteer class.
  *
  * IMPORTANT: if you are using Puppeteer in a Node environment, you will get an
- * instance of {@link PuppeteerNode} when you import or require `puppeteer`.
+ * instance of `PuppeteerNode` when you import or require `puppeteer`.
  * That class extends `Puppeteer`, so has all the methods documented below as
- * well as all that are defined on {@link PuppeteerNode}.
+ * well as all that are defined on `PuppeteerNode`.
  *
  * @public
  */

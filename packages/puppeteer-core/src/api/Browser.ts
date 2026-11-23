@@ -522,7 +522,7 @@ export interface NetworkRestrictions {
  * {@link Browser} represents a browser instance that is either:
  *
  * - connected to via {@link Puppeteer.connect} or
- * - launched by {@link PuppeteerNode.launch}.
+ * - launched by `PuppeteerNode.launch`.
  *
  * {@link Browser} {@link EventEmitter.emit | emits} various events which are
  * documented in the {@link BrowserEvent} enum.
@@ -884,7 +884,7 @@ export abstract class Browser extends EventEmitter<BrowserEvents> {
    * @remarks
    *
    * Only available when connected to the browser over a pipe connection. Set
-   * `pipe: true` in {@link PuppeteerNode.launch | puppeteer.launch}; the launch
+   * `pipe: true` in `puppeteer.launch`; the launch
    * option defaults to `false`. The underlying `PWA` CDP domain is not exposed
    * over a WebSocket connection.
    *

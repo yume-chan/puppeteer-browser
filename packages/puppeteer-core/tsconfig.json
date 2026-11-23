@@ -9,13 +9,14 @@
       "node",
       "chrome"
     ],
-    "lib":[
+    "lib": [
       "es2022",
+      "ESNext.Disposable",
       "DOM"
     ],
     "sourceMap": true,
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "module": "esnext",
     "target": "es2022",
     "moduleResolution": "bundler",
