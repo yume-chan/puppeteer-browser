@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {isNode, environment} from '../environment.js';
-
 declare global {
   const __PUPPETEER_DEBUG: string;
 }
@@ -102,17 +100,6 @@ export type Logger = (prefix: string) => LoggerFunction | undefined;
  * @internal
  */
 export const debug: Logger = (prefix): LoggerFunction | undefined => {
-  if (isNode) {
-    const nodeDebug = environment.value.debuglog?.(prefix);
-    if (!nodeDebug || !nodeDebug.enabled) {
-      return;
-    }
-
-    return (...logArgs: unknown[]) => {
-      (nodeDebug as LoggerFunction)(...logArgs);
-    };
-  }
-
   const debugLevel = (globalThis as any).__PUPPETEER_DEBUG;
   if (!debugLevel) {
     return;

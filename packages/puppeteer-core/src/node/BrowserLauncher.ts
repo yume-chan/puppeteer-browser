@@ -150,8 +150,6 @@ export abstract class BrowserLauncher {
       idGenerator = createIncrementalIdGenerator(),
       blocklist,
       allowlist,
-      devtools = false,
-      headless = !devtools,
     } = options;
 
     let {protocol} = options;
@@ -225,7 +223,6 @@ export abstract class BrowserLauncher {
         dumpio,
         env,
         pipe: usePipe,
-        windowsHide: headless !== false,
         onExit: onProcessExit,
         signal: options.signal,
         logger: options.logger,

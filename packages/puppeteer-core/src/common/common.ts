@@ -14,7 +14,6 @@ export * from './ConsoleMessage.js';
 export type * from './Cookie.js';
 export * from './CustomQueryHandler.js';
 export * from './Debug.js';
-export * from './Device.js';
 export * from './Errors.js';
 export * from './EventEmitter.js';
 export * from './FileChooser.js';

@@ -1,5 +1,29 @@
 # Puppeteer
 
+A dedicated build of puppeteer-core for browsers.
+
+## Why not just `import "puppeteer-core"`?
+
+Because it's `package.json` uses the legacy "browser" field, which is not (and will not be) supported by TypeScript (see [Microsoft/TypeScript#7533](https://github.com/Microsoft/TypeScript/issues/7753)), so exports like `BrowserWebSocketTransport` can't be found.
+
+## Why not just `import "puppeteer-core/internal/puppeteer-core-browser.js"`?
+
+* It still pulls in `@puppeteer/browsers` which is Node.js only, and some bundlers including `esbuild` doesn't like `yargs` (which is a dependency of `@puppeteer/browsers`).
+* It bundles its dependencies (mainly `rxjs`) which reduces dependency sharing and increases bundle size.
+* It's too long.
+
+## What changes does this build include?
+
+* `preserveConstEnums` enabled, so const enums like `BrowserEvent` are actually exported as values.
+* `isNode` statically evaluates to `false`, and all Node.js specific code is excluded.
+* Dependencies are declared via `package.json` `dependencies`
+* `_connectToBiDiBrowser` is excluded, only Chrome DevTools Protocol (CDP) is supported.
+* `KnownDevices` (a collection of predefined device descriptors for emulating mobile devices) is excluded.
+
+Note: `ScreenRecorder` is not supported in Web environments (can be reimplemented using `MediaRecorder` or `VideoEncoder`).
+
+---
+
 [![build](https://github.com/puppeteer/puppeteer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/puppeteer/puppeteer/actions/workflows/ci.yml)
 [![npm puppeteer package](https://img.shields.io/npm/v/puppeteer.svg)](https://npmjs.org/package/puppeteer)
 

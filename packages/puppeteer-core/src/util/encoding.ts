@@ -16,10 +16,6 @@ export function stringToTypedArray(
       // @ts-expect-error fromBase64 is newer than the types we use.
       return Uint8Array.fromBase64(string);
     }
-    // TODO: remove Buffer in v26 when it becomes LTS.
-    if (typeof Buffer === 'function') {
-      return Buffer.from(string, 'base64');
-    }
     return Uint8Array.from(atob(string), m => {
       return m.codePointAt(0)!;
     });
